@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''
+randomly initiate the k = 3 normal distributions N (µi
+, σ2i) with uniformly distributed
+distribution parameters µi ∈ [−1, 1] and σi ∈ [0.2, 1.2] at the beginning of each new experiment run.
+'''
 def initialize_arms(k=3):
     mus = np.random.uniform(-1, 1, k)
     sigmas = np.random.uniform(0.2, 1.2, k)
@@ -11,7 +16,7 @@ def simulate_round(mu, sigma, prediction):
     error = abs(feedback - prediction)
     return feedback, error
 
-def two_phase_bandit(mus, sigmas, T=300, exploration_ratio=0.5):
+def two_phase_bandit(mus, sigmas, T=300, exploration_ratio=0.5):#by default 300 rounds and 50% exploration
     k = len(mus)
     T1 = int(T * exploration_ratio)
     errors = np.zeros(T)
@@ -43,7 +48,7 @@ def two_phase_bandit(mus, sigmas, T=300, exploration_ratio=0.5):
 
     return np.sum(errors)
 
-def run_experiments(num_experiments=30, strategies=[0.25, 0.5, 0.75]):
+def run_experiments(num_experiments=100, strategies=[0.25, 0.5, 0.75]):
     total_errors = {str(ratio): [] for ratio in strategies}
     for ratio in strategies:
         print(f"Testing strategy with {ratio*100}% exploration.")
@@ -57,10 +62,11 @@ def run_experiments(num_experiments=30, strategies=[0.25, 0.5, 0.75]):
     plt.xticks([1, 2, 3], ['25% Exploration', '50% Exploration', '75% Exploration'])
     plt.title('Comparison of Total Prediction Errors across Strategies')
     plt.ylabel('Total Prediction Error')
-    plt.show()
+
 
     # Save plot to disk
     plt.savefig('bandit_strategy_comparison.png')
+    plt.show()
     return total_errors
 
 # Run the experiments and plot the results
